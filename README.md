@@ -34,3 +34,10 @@ Activate venv and start ipython
 - pets = [Pet(name=n, species=) for n, s in zip(names,species)]... where pets[0].name = 'cricket'
 - db.session.add_all(pets)
 - db.session.commit()
+
+# Querying in iPython
+- %run app.py
+- Pet.query.all() will return all pets from pet_shop
+- OR Pet.query.get(5) will get the pet of id = 5
+- Pet.query.filter_by(species='dog').all() returns all values where species = 'dog
+- Pet.query.filter_by(species='dog', hunger=20).first() returns FIRST value WHERE species = 'dog' AND hunger = 20
