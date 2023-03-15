@@ -25,3 +25,12 @@ Activate venv and start ipython
 - In ipython, create new model i.e. sumo = Pet(name='Sumo', species='dog', hunger=13)
 - Add to database: db.session.add(sumo)
 - Commit change to database: db.session.commit()
+
+# Commit Multiple Models to Database
+- In ipython:
+- names = ['cricket', 'origami', 'abi']
+- species = ['cat', 'cat', 'dog']
+- zip(names, species)
+- pets = [Pet(name=n, species=) for n, s in zip(names,species)]... where pets[0].name = 'cricket'
+- db.session.add_all(pets)
+- db.session.commit()
