@@ -19,3 +19,9 @@ Activate venv and start ipython
 - movies = db.session.execute(text('SELECT * FROM movies'))
 - list(movies)
 - Will list all(*) data from movies table
+
+# Create model and Add to Database
+- Import model to app.py from models
+- In ipython, create new model i.e. sumo = Pet(name='Sumo', species='dog', hunger=13)
+- Add to database: db.session.add(sumo)
+- Commit change to database: db.session.commit()
