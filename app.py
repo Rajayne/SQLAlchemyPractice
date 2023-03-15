@@ -3,8 +3,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db
 
 app = Flask(__name__,template_folder='templates')
-# Tells SQLAlchemy to communicate with postgresql using the database movies_example
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///movies_example'
+# Tells SQLAlchemy to communicate with postgresql using the database pet_shop
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pet_shop'
 app.config['SQLALCHEMY_ECHO'] = True
 app.app_context().push()
 
