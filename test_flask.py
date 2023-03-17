@@ -1,0 +1,62 @@
+from unittest import TestCase
+
+from app import app
+from models import db, Pet
+
+# Use test database and don't clutter tests with SQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pet_shop'
+app.config['SQLALCHEMY_ECHO'] = False
+
+# Make FLask errors be real errors rather than HTML pages with error info
+app.config['TESTING'] = True
+
+# Tell it not to use DebugToolbar
+app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
+
+db.drop_all()
+db.create_all()
+
+class PetViewsTestCase(TestCase):
+    """Tests views for Pets"""
+
+    def setUp(self):
+        """Add sample pet"""
+        Pet.query.delete()
+
+        pet = Pet(name='TestPet', species='dog', hunger=10)
+        db.session.add(pet)
+        db.session.commit()
+
+        self.pet_id = pet.id
+        self.pet = pet
+
+    def tearDown(self):
+        """Cleanup any fouled transaction"""
+        db.session.rollback()
+
+    def test_list_pets(self):
+        with app.test_client() as client:
+            resp = client.get('/')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('TestPet', html)
+
+    def test_show_pet(self):
+        with app.test_client() as client:
+            resp = client.get(f'/{self.pet_id}')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('TestPet', html)
+            self.assertIn(self.pet.species, html)
+
+    def test_add_pet(self):
+        with app.test_client() as client:
+            d = {"name": "TestPet2", "species": "cat", "hunger": 20}
+            resp = client.post('/', data=d, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('TestPet2', html)
+    
